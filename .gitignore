@@ -1,0 +1,47 @@
+# Java ingores
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+
+# vim ignores
+.*.sw[a-z]
+*.un~
+Session.vim
+
+# Eclipse ignores - general
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# Eclipse ignores - External tool builders
+.externalToolBuilders/
+
+# Eclipse ignores - Locally stored "Eclipse launch configurations"
+*.launch
+
+# Eclipse ignores - CDT-specific
+.cproject
+
+# Eclipse ignores - PDT-specific
+.buildpath
