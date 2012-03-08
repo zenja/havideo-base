@@ -1,0 +1,4 @@
+This is the README file for the havideo-base project
+
+The havideo-base project provides the underlying infrastructure for Havideo, 
+a video processing system based on hadoop.
