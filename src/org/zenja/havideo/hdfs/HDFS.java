@@ -83,7 +83,7 @@ public class HDFS implements ServletContextListener {
 	    return in;
 	}
 	
-	public boolean isExist(String source) throws IOException {
+	public static boolean isExist(String source) throws IOException {
 		return fileSystem.exists(new Path(source));
 	}
 

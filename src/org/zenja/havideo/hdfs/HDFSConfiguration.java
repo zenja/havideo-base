@@ -21,6 +21,10 @@ public class HDFSConfiguration implements ServletContextListener {
 		
 		return conf;
 	}
+	
+	public static String getRawVideoDirectory() {
+		return rawVideoDirectory;
+	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
