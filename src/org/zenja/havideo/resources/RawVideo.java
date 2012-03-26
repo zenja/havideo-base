@@ -69,15 +69,6 @@ public class RawVideo {
 				System.out.println(filePath + " downloaded");
 			}
 
-			private boolean checkFileName(String fileName) {
-				// TODO fill this method
-				return true;
-			}
-
-			private boolean checkUserId(String userId) {
-				// TODO fill this method
-				return true;
-			}
 		};
 	}
 	
@@ -116,5 +107,15 @@ public class RawVideo {
 		//DEBUG
 		System.out.println("File upload " + filePath + " success.");
 		return Response.status(200).entity(output).build();
+	}
+	
+	private boolean checkFileName(String fileName) {
+		// TODO fill this method
+		return true;
+	}
+
+	private boolean checkUserId(String userId) {
+		// TODO fill this method
+		return true;
 	}
 }
