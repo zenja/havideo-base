@@ -17,6 +17,7 @@ public class HDFSConfiguration implements ServletContextListener {
 	protected static String hadoopConfFiles;
 	protected static Configuration conf;
 	protected static String rawVideoDirectory;
+	protected static String convertedVideoDirectory;
 	
 	public static Configuration getConfiguration() throws HDFSConfigurationNotInitializedException {
 		if(conf == null) initConf();
@@ -34,10 +35,16 @@ public class HDFSConfiguration implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		// load configuration files
+		// load configuration properties
 		hadoopBase = event.getServletContext().getInitParameter("hadoop_base");
 		hadoopConfFiles = event.getServletContext().getInitParameter("hadoop_conf_files");
 		rawVideoDirectory = event.getServletContext().getInitParameter("hdfs_raw_video_directory");
+		convertedVideoDirectory = event.getServletContext().getInitParameter("hdfs_converted_video_directory");
+		
+		assert hadoopBase != null;
+		assert hadoopConfFiles != null;
+		assert rawVideoDirectory != null;
+		assert convertedVideoDirectory != null;
 		
 		// init HDFS file system class
 		try {
@@ -63,5 +70,9 @@ public class HDFSConfiguration implements ServletContextListener {
 			
 			logger.debug("Added configuration file: " + confFile);
 		}
+	}
+
+	public static String getConvertedVideoDirectory() {
+		return convertedVideoDirectory;
 	}
 }

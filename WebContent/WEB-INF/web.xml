@@ -33,7 +33,12 @@
 		<param-name>hdfs_raw_video_directory</param-name>
 		<param-value>/video/raw</param-value>
 	</context-param>
-
+	
+	<context-param>
+		<param-name>hdfs_converted_video_directory</param-name>
+		<param-value>/video/converted</param-value>
+	</context-param>
+	
 	<listener>
 		<listener-class>org.zenja.havideo.hdfs.HDFSConfiguration</listener-class>
 	</listener>
