@@ -56,15 +56,17 @@ public class RawVideo {
 				 */
 				FSDataInputStream in = HDFS.getFileAsStream(filePath);
 				//DEBUG
-				System.out.println("Start writing to " + filePath);
-				byte[] b = new byte[1024];
+				System.out.println("Start downloading " + filePath);
+				byte[] b = new byte[10240];
 			    int numBytes = 0;
 			    while ((numBytes = in.read(b)) > 0) {
+			    	System.out.println("Writing " + numBytes + " bytes..");
 			    	output.write(b, 0, numBytes);
 			    }
+			    System.out.println("About to close the stream...");
 			    output.close();
 			    //DEBUG
-				System.out.println("Finish writing to " + filePath);
+				System.out.println(filePath + " downloaded");
 			}
 
 			private boolean checkFileName(String fileName) {
