@@ -8,9 +8,11 @@ import javax.servlet.ServletContextListener;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.log4j.Logger;
 import org.zenja.havideo.hdfs.exceptions.HDFSConfigurationNotInitializedException;
 
 public class HDFSConfiguration implements ServletContextListener {
+	private static Logger logger = Logger.getLogger(HDFSConfiguration.class);
 	protected static String hadoopBase;
 	protected static String hadoopConfFiles;
 	protected static Configuration conf;
@@ -59,8 +61,7 @@ public class HDFSConfiguration implements ServletContextListener {
 			String confFile = hadoopBase + "/conf/" + filename;
 			conf.addResource(new Path(confFile));
 			
-			//DEBUG
-			System.out.println("Added configuration file: " + confFile);
+			logger.debug("Added configuration file: " + confFile);
 		}
 	}
 }

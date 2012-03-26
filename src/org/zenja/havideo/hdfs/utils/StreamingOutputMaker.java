@@ -7,6 +7,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.log4j.Logger;
 import org.zenja.havideo.hdfs.HDFS;
 
 /**
@@ -15,13 +16,15 @@ import org.zenja.havideo.hdfs.HDFS;
  *
  */
 public class StreamingOutputMaker {
+	
+	private static Logger logger = Logger.getLogger(StreamingOutputMaker.class);
+	
 	public static StreamingOutput makeStreamingOutput(final String path) {
 		return new StreamingOutput() {
 			public void write(OutputStream output) throws IOException, WebApplicationException {
 				FSDataInputStream in = HDFS.getFileAsStream(path);
 				
-				//DEBUG
-				System.out.println("Start downloading " + path);
+				logger.debug("Start downloading " + path);
 				
 				byte[] b = new byte[10240];
 			    int numBytes = 0;
@@ -32,8 +35,7 @@ public class StreamingOutputMaker {
 			    System.out.println("About to close the stream...");
 			    output.close();
 			    
-			    //DEBUG
-				System.out.println(path + " downloaded");
+			    logger.debug(path + " downloaded");
 			}
 		};
 	}

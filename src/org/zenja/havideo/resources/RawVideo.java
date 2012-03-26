@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.log4j.Logger;
 import org.zenja.havideo.hdfs.HDFS;
 import org.zenja.havideo.hdfs.HDFSConfiguration;
 
@@ -25,6 +26,7 @@ import com.sun.jersey.multipart.FormDataParam;
 @Path("/video/raw")
 public class RawVideo {
 	
+	private static Logger logger = Logger.getLogger(RawVideo.class);
 	private String rawVideoDirectory = HDFSConfiguration.getRawVideoDirectory();
 	
 	@GET 
@@ -43,11 +45,11 @@ public class RawVideo {
 						checkUserId(userId) == false || 
 						checkFileName(fileName) == false) {
 					
-					//DEBUG
-					System.out.println("Path not exists or invalid user_id or file_name: ");
-					System.out.println("--Path: " + filePath);
-					System.out.println("--user_id: " + userId);
-					System.out.println("--file_name: " + fileName);
+					logger.debug("Path not exists or invalid user_id or file_name: ");
+					logger.debug("--Path: " + filePath);
+					logger.debug("--user_id: " + userId);
+					logger.debug("--file_name: " + fileName);
+					
 					return;
 				}
 				
@@ -55,8 +57,9 @@ public class RawVideo {
 				 * read the file
 				 */
 				FSDataInputStream in = HDFS.getFileAsStream(filePath);
-				//DEBUG
-				System.out.println("Start downloading " + filePath);
+				
+				logger.debug("Start downloading " + filePath);
+				
 				byte[] b = new byte[10240];
 			    int numBytes = 0;
 			    while ((numBytes = in.read(b)) > 0) {
@@ -65,8 +68,8 @@ public class RawVideo {
 			    }
 			    System.out.println("About to close the stream...");
 			    output.close();
-			    //DEBUG
-				System.out.println(filePath + " downloaded");
+			    
+			    logger.debug(filePath + " downloaded");
 			}
 
 		};
@@ -83,8 +86,8 @@ public class RawVideo {
  
 		//check if all params are available
 		if(userId == null || uploadedInputStream == null) {
-			//DEBUG
-			System.out.println("In method RawVideo.uploadFile: params not available");
+			logger.debug("In method RawVideo.uploadFile: params not available");
+			
 			return Response.status(500).entity("Parameters not available").build();
 		}
 		
@@ -98,14 +101,16 @@ public class RawVideo {
 			HDFS.createFile(uploadedInputStream, filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
-			//DEBUG
-			System.out.println("File upload " + filePath + " fail!");
+			
+			logger.debug("File upload " + filePath + " fail!");
+			
 			return Response.status(500).entity("Fail to upload file to " + filePath).build();
 		}
  
 		String output = "File uploaded to : " + filePath;
-		//DEBUG
-		System.out.println("File upload " + filePath + " success.");
+		
+		logger.debug("File upload " + filePath + " success.");
+		
 		return Response.status(200).entity(output).build();
 	}
 	

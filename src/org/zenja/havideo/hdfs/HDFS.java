@@ -13,17 +13,18 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.log4j.Logger;
 
 public class HDFS implements ServletContextListener {
+	private static Logger logger = Logger.getLogger(HDFS.class);
 	private static FileSystem fileSystem;
 	
 	static void initFileSystem(FileSystem fs) {
-		//DEBUG
-		System.out.println("About to initializing the filesystem...");
+		logger.debug("About to initializing the filesystem...");
+		
 		fileSystem = fs;
 		
-		//DEBUG
-		System.out.println("Filesystem initialized. URI: " + fileSystem.getUri().toString());
+		logger.debug("Filesystem initialized. URI: " + fileSystem.getUri().toString());
 	}
 	
 	public static void createFile(String source, String dest) throws IOException {
