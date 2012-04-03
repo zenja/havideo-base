@@ -39,6 +39,11 @@
 		<param-value>/video/converted</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>video_thumbnail_directory</param-name>
+		<param-value>/video/thumbnail</param-value>
+	</context-param>
+	
 	<listener>
 		<listener-class>org.zenja.havideo.hdfs.HDFSConfiguration</listener-class>
 	</listener>

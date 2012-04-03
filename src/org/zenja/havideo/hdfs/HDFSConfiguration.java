@@ -18,6 +18,7 @@ public class HDFSConfiguration implements ServletContextListener {
 	protected static Configuration conf;
 	protected static String rawVideoDirectory;
 	protected static String convertedVideoDirectory;
+	protected static String videoThumbnailDirectory;
 	
 	public static Configuration getConfiguration() throws HDFSConfigurationNotInitializedException {
 		if(conf == null) initConf();
@@ -25,10 +26,6 @@ public class HDFSConfiguration implements ServletContextListener {
 		return conf;
 	}
 	
-	public static String getRawVideoDirectory() {
-		return rawVideoDirectory;
-	}
-
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 	}
@@ -40,11 +37,13 @@ public class HDFSConfiguration implements ServletContextListener {
 		hadoopConfFiles = event.getServletContext().getInitParameter("hadoop_conf_files");
 		rawVideoDirectory = event.getServletContext().getInitParameter("hdfs_raw_video_directory");
 		convertedVideoDirectory = event.getServletContext().getInitParameter("hdfs_converted_video_directory");
+		videoThumbnailDirectory = event.getServletContext().getInitParameter("video_thumbnail_directory");
 		
 		assert hadoopBase != null;
 		assert hadoopConfFiles != null;
 		assert rawVideoDirectory != null;
 		assert convertedVideoDirectory != null;
+		assert videoThumbnailDirectory != null;
 		
 		// init HDFS file system class
 		try {
@@ -74,5 +73,13 @@ public class HDFSConfiguration implements ServletContextListener {
 
 	public static String getConvertedVideoDirectory() {
 		return convertedVideoDirectory;
+	}
+	
+	public static String getRawVideoDirectory() {
+		return rawVideoDirectory;
+	}
+	
+	public static String getVideoThumbnailDirectory() {
+		return videoThumbnailDirectory;
 	}
 }

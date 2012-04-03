@@ -7,7 +7,7 @@ public class ParameterChecker {
 	}
 
 	public static boolean checkUserId(String userId) {
-		// TODO fill this method
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

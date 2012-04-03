@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="api/video/raw/upload" enctype="multipart/form-data" method="post">
+	<form action="api/video/thumbnail/upload" enctype="multipart/form-data" method="post">
 		<p>
 			Select a file : <input type="file" name="file" size="45" />
 		</p>

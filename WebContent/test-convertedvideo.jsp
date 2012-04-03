@@ -12,7 +12,7 @@
 			Select a file : <input type="file" name="file" size="45" />
 		</p>
 		<p>
-			User_id: <input type="text" name="user_id" value="wangxing"></input>
+			User_id: <input type="text" name="user_id" value="1"></input>
 		</p>
 		<input type="submit" value="Upload It" />
 	</form>
