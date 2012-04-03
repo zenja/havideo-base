@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.zenja.havideo.hdfs.HDFS;
 import org.zenja.havideo.hdfs.HDFSConfiguration;
 import org.zenja.havideo.hdfs.utils.StreamingOutputMaker;
+import org.zenja.havideo.resources.utils.FileNameGenerator;
 import org.zenja.havideo.resources.utils.ParameterChecker;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -28,24 +29,21 @@ public class ConvertedVideo {
 	private String convertedVideoDirectory = HDFSConfiguration.getConvertedVideoDirectory();
 	
 	@GET 
-	@Path("/{user_id}/{file_name}")
+	@Path("/{file_name}")
 	public Response download(
-			@PathParam("user_id") final String userId, 
 			@PathParam("file_name") final String fileName) {
 		try {
 			//build whole path of the file
-			String filePath = convertedVideoDirectory + "/" + userId + "/" + fileName;
+			String filePath = convertedVideoDirectory + "/" + fileName;
 			
 			/*
 			 * Check if params are valid
 			 */
 			if(HDFS.isExist(filePath) == false || 
-					ParameterChecker.checkUserId(userId) == false || 
 					ParameterChecker.checkFileName(fileName) == false) {
 				
 				logger.debug("Path not exists or invalid user_id or file_name: ");
 				logger.debug("--Path: " + filePath);
-				logger.debug("--user_id: " + userId);
 				logger.debug("--file_name: " + fileName);
 				
 				return Response.status(500).entity("Parameters not valid").build();
@@ -66,20 +64,23 @@ public class ConvertedVideo {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response uploadFile(
-		@FormDataParam("user_id") String userId, 
+		@FormDataParam("user_id") int userId, 
 		@FormDataParam("file") InputStream uploadedInputStream,
 		@FormDataParam("file") FormDataContentDisposition fileDetail) {
  
 		//check if all params are available
-		if(userId == null || uploadedInputStream == null) {
+		if(uploadedInputStream == null) {
 			logger.debug("In method RawVideo.uploadFile: params not available");
 			
 			return Response.status(500).entity("Parameters not available").build();
 		}
 		
+		//TODO: check if the user exists (Urgent!)
+		
 		//build target directory path
-		String directoryPath = convertedVideoDirectory + "/" + userId;
-		String filePath = directoryPath + "/" + fileDetail.getFileName();
+		String generatedFileName = 
+				FileNameGenerator.generateVideoFileName(userId, fileDetail.getFileName());
+		String filePath = convertedVideoDirectory + "/" + generatedFileName;
 		
 		//TODO notify video meta-data service!! (Urgent!)
 		
