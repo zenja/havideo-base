@@ -44,8 +44,32 @@
 		<param-value>/video/thumbnail</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>db_username</param-name>
+		<param-value>root</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>db_password</param-name>
+		<param-value>root</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>db_url</param-name>
+		<param-value>jdbc:mysql://localhost:3306/havideo</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>db_driver</param-name>
+		<param-value>com.mysql.jdbc.Driver</param-value>
+	</context-param>
+	
 	<listener>
 		<listener-class>org.zenja.havideo.hdfs.HDFSConfiguration</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.zenja.havideo.db.DBConfiguration</listener-class>
 	</listener>
 
 	<welcome-file-list>
