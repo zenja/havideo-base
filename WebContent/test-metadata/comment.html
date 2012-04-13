@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+<title>comment</title>
+</head>
+<body>
+	<h5>添加评论</h5>
+	<form action="../api/user/comment" method="post">
+		<table border="1">
+			<tr>
+				<td>视频id</td>
+				<td><input type="text" name="id" /></td>
+			</tr>
+			<tr>
+				<td>上传人id</td>
+				<td><input type="text" name="user" /></td>
+			</tr>
+			<tr>
+				<td>上传人名字</td>
+				<td><input type="text" name="user_name" /></td>
+			</tr>
+			<tr>
+				<td>内容</td>
+				<td><textarea name="content" rows="3" cols="20"></textarea></td>
+			</tr>
+			<tr>
+				<td>时间</td>
+				<td><input type="text" name="time" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="提交" /></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

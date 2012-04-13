@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+<title>score</title>
+</head>
+<body>
+	<h5>给评分</h5>
+	<form action="../api/user/score/give" method="post">
+		<table border="1">
+			<tr>
+				<td>视频id</td>
+				<td><input type="text" name="id" /></td>
+			</tr>
+			<tr>
+				<td>上传人id</td>
+				<td><input type="text" name="user" /></td>
+			</tr>
+			<tr>
+				<td>分数</td>
+				<td><input type="text" name="score" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="提交" /></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

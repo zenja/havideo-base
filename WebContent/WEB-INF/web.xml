@@ -13,10 +13,25 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>Jersey REST Service for meta-data</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>cn.edu.nju.software.liushuai.storage.service</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Jersey REST Service for meta-data</servlet-name>
+		<url-pattern>/api/metadata/*</url-pattern>
 	</servlet-mapping>
 
 	<context-param>
@@ -64,12 +79,30 @@
 		<param-value>com.mysql.jdbc.Driver</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>metadata_service_root</param-name>
+		<param-value>http://localhost:9999/havideo-base</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>mongodb_connection_host</param-name>
+		<param-value>localhost</param-value>
+	</context-param>
+	
 	<listener>
 		<listener-class>org.zenja.havideo.hdfs.HDFSConfiguration</listener-class>
 	</listener>
 	
 	<listener>
 		<listener-class>org.zenja.havideo.db.DBConfiguration</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>cn.edu.nju.software.liushuai.storage.mongodb.MongoConst</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>cn.edu.nju.software.liushuai.storage.service.ServiceConst</listener-class>
 	</listener>
 
 	<welcome-file-list>

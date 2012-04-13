@@ -10,26 +10,26 @@ public class XmlConst {
 	public static final String DOCUMENT_BODY = "body";
 	//body tags
 	public static final String BODY_LIST = "list";
-	public static final String BODY_VEDIO = "vedio";
+	public static final String BODY_VIDEO = "video";
 	public static final String BODY_CATALOG = "catalog";
 	public static final String BODY_COMMENT = "comment";
 	//tag list
 	public static final String LIST_SIZE = "size";
 	public static final String LIST_TYPE = "type";
-	//tag vedio
-	public static final String VEDIO_ID = "id";
-	public static final String VEDIO_UPLOADER = "uploader";
-	public static final String VEDIO_CAPTION = "caption";
-	public static final String VEDIO_CATALOG = "catalog";
-	public static final String VEDIO_DESCRIPTION = "description";
-	public static final String VEDIO_ORIG_FILE_ADDRESS = "orig_file_address";
-	public static final String VEDIO_NEW_FILE_ADDRESS = "new_file_address";
-	public static final String VEDIO_TAGS = "tags";
-	public static final String VEDIO_TAG = "tag";
-	public static final String VEDIO_UPLOAD_TIME = "upload_time";
-	public static final String VEDIO_CLICK_COUNT = "click_count";
-	public static final String VEDIO_SCORE = "score";
-	public static final String VEDIO_SCORE_COUNT = "score_count";
+	//tag video
+	public static final String VIDEO_ID = "id";
+	public static final String VIDEO_UPLOADER = "uploader";
+	public static final String VIDEO_CAPTION = "caption";
+	public static final String VIDEO_CATALOG = "catalog";
+	public static final String VIDEO_DESCRIPTION = "description";
+	public static final String VIDEO_ORIG_FILE_ADDRESS = "orig_file_address";
+	public static final String VIDEO_NEW_FILE_ADDRESS = "new_file_address";
+	public static final String VIDEO_TAGS = "tags";
+	public static final String VIDEO_TAG = "tag";
+	public static final String VIDEO_UPLOAD_TIME = "upload_time";
+	public static final String VIDEO_CLICK_COUNT = "click_count";
+	public static final String VIDEO_SCORE = "score";
+	public static final String VIDEO_SCORE_COUNT = "score_count";
 	//tag catalog
 	public static final String CATALOG_ID = "id";
 	public static final String CATALOG_NAME = "name";
@@ -38,7 +38,7 @@ public class XmlConst {
 	public static final String CATALOG_POSITION = "position";
 	//tag comment
 	public static final String COMMENT_ID = "id";
-	public static final String COMMENT_VEDIO_ID = "vedio_id";
+	public static final String COMMENT_VIDEO_ID = "video_id";
 	public static final String COMMENT_USER = "user";
 	public static final String COMMENT_UESR_NAME = "user_name";
 	public static final String COMMENT_CONTENT = "content";
