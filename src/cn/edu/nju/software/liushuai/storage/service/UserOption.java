@@ -59,32 +59,32 @@ public class UserOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(
-							MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(
+							MongoConst.COLLECTION_VEDIO);
 			ObjectId objectId = new ObjectId();
-			DBObject videoBean = new BasicDBObject();
-			videoBean.put(MongoConst.DATABASE_KEYWORD_ID, objectId);
-			videoBean.put(MongoConst.KEY_VIDEO_UPLOADER, uploader);
-			videoBean.put(MongoConst.KEY_VIDEO_CAPTION, caption);			
-			videoBean.put(MongoConst.KEY_VIDEO_DESCRIPTION, description);
-			videoBean.put(MongoConst.KEY_VIDEO_ORIG_FILE_ADDRESS, origFileAddress);
-			videoBean.put(MongoConst.KEY_VIDEO_NEW_FILE_ADDRESS, newFileAddress);
-			videoBean.put(MongoConst.KEY_VIDEO_UPLOAD_TIME, uploadTime);
-			videoBean.put(MongoConst.KEY_VIDEO_IS_ACTIVE, Boolean.FALSE);
-			videoBean.put(MongoConst.KEY_VIDEO_CLICK_COUNT, Integer.valueOf(0));
+			DBObject vedioBean = new BasicDBObject();
+			vedioBean.put(MongoConst.DATABASE_KEYWORD_ID, objectId);
+			vedioBean.put(MongoConst.KEY_VEDIO_UPLOADER, uploader);
+			vedioBean.put(MongoConst.KEY_VEDIO_CAPTION, caption);			
+			vedioBean.put(MongoConst.KEY_VEDIO_DESCRIPTION, description);
+			vedioBean.put(MongoConst.KEY_VEDIO_ORIG_FILE_ADDRESS, origFileAddress);
+			vedioBean.put(MongoConst.KEY_VEDIO_NEW_FILE_ADDRESS, newFileAddress);
+			vedioBean.put(MongoConst.KEY_VEDIO_UPLOAD_TIME, uploadTime);
+			vedioBean.put(MongoConst.KEY_VEDIO_IS_ACTIVE, Boolean.FALSE);
+			vedioBean.put(MongoConst.KEY_VEDIO_CLICK_COUNT, Integer.valueOf(0));
 			//catalog
 			String[] catalogArray = catalog.split("\\s");
-			videoBean.put(MongoConst.KEY_VIDEO_CATALOG, catalogArray);
+			vedioBean.put(MongoConst.KEY_VEDIO_CATALOG, catalogArray);
 			//tags
 			String[] tagArray = tags.split("\\s");
-			videoBean.put(MongoConst.KEY_VIDEO_TAGS, tagArray);
+			vedioBean.put(MongoConst.KEY_VEDIO_TAGS, tagArray);
 			//score
 			DBObject score = new BasicDBObject();
-			score.put(MongoConst.KEY_VIDEO_SCORE_COUNT, Integer.valueOf(0));
-			score.put(MongoConst.KEY_VIDEO_SCORE_TOTAL, Double.valueOf(0));
-			videoBean.put(MongoConst.KEY_VIDEO_SCORE, score);
+			score.put(MongoConst.KEY_VEDIO_SCORE_COUNT, Integer.valueOf(0));
+			score.put(MongoConst.KEY_VEDIO_SCORE_TOTAL, Double.valueOf(0));
+			vedioBean.put(MongoConst.KEY_VEDIO_SCORE, score);
 			
-			videoCollection.insert(videoBean);
+			vedioCollection.insert(vedioBean);
 			DBObject error = db.getLastError();
 			Object err = error.get(MongoConst.FUNCTION_GETLASTERROR_RETURN_KEY_ERR);
 			if(err != null) {
@@ -93,7 +93,7 @@ public class UserOption {
 			} else {
 				Element root = doc.getDocumentElement();
 				Element body = XmlMaker.createElementChild(doc, root, XmlConst.DOCUMENT_BODY);
-				Element id = XmlMaker.createElementChild(doc, body, XmlConst.VIDEO_ID);
+				Element id = XmlMaker.createElementChild(doc, body, XmlConst.VEDIO_ID);
 				id.setTextContent(objectId.toString());
 			}
 		} catch (MongoException e) {
@@ -114,20 +114,20 @@ public class UserOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(MongoConst.COLLECTION_VEDIO);
 			DBObject query = new BasicDBObject();
 			query.put(MongoConst.DATABASE_KEYWORD_ID, new ObjectId(id));
-			query.put(MongoConst.KEY_VIDEO_IS_ACTIVE, Boolean.TRUE);
-			DBObject videoBean = videoCollection.findOne(query);
-			if(videoBean == null) {
+			query.put(MongoConst.KEY_VEDIO_IS_ACTIVE, Boolean.TRUE);
+			DBObject vedioBean = vedioCollection.findOne(query);
+			if(vedioBean == null) {
 				throw new ErrorBranchException(ErrorMessage.NO_THIS_ID);
 			}
 			//increase click count
 			DBObject update = new BasicDBObject();
 			DBObject increase = new BasicDBObject();
-			increase.put(MongoConst.KEY_VIDEO_CLICK_COUNT, Integer.valueOf(1));
+			increase.put(MongoConst.KEY_VEDIO_CLICK_COUNT, Integer.valueOf(1));
 			update.put(MongoConst.MONGO_MODIFYER_INCREASE, increase);
-			videoCollection.update(query, update);
+			vedioCollection.update(query, update);
 			DBObject error = db.getLastError();
 			Object err = error.get(MongoConst.FUNCTION_GETLASTERROR_RETURN_KEY_ERR);
 			if(err != null) {
@@ -136,24 +136,24 @@ public class UserOption {
 			
 			Element root = doc.getDocumentElement();
 			Element body = XmlMaker.createElementChild(doc, root, XmlConst.DOCUMENT_BODY);
-			Element video = XmlMaker.createElementChild(doc, body, XmlConst.BODY_VIDEO);
-			Element uploader = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOADER);
-			Element caption = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CAPTION);
-			Element catalog = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CATALOG);
-			Element description = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_DESCRIPTION);
-			Element origFileAddress = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_ORIG_FILE_ADDRESS);
-			Element newFileAddress = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_NEW_FILE_ADDRESS);
-			Element tags = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_TAGS);
-			Element uploadTime = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOAD_TIME);
-			Element clickCount = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CLICK_COUNT);
-			Element score = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_SCORE);
-			Element scoreCount = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_SCORE_COUNT);
+			Element vedio = XmlMaker.createElementChild(doc, body, XmlConst.BODY_VEDIO);
+			Element uploader = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOADER);
+			Element caption = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CAPTION);
+			Element catalog = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CATALOG);
+			Element description = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_DESCRIPTION);
+			Element origFileAddress = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_ORIG_FILE_ADDRESS);
+			Element newFileAddress = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_NEW_FILE_ADDRESS);
+			Element tags = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_TAGS);
+			Element uploadTime = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOAD_TIME);
+			Element clickCount = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CLICK_COUNT);
+			Element score = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_SCORE);
+			Element scoreCount = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_SCORE_COUNT);
 			
-			uploader.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOADER)));
-			caption.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_CAPTION)));
+			uploader.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOADER)));
+			caption.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_CAPTION)));
 			
 			//catalog array to catalog string
-			BasicBSONList catalogList = (BasicBSONList)videoBean.get(MongoConst.KEY_VIDEO_CATALOG);
+			BasicBSONList catalogList = (BasicBSONList)vedioBean.get(MongoConst.KEY_VEDIO_CATALOG);
 			String catalogString = "";
 			if(catalogList != null) {
 				for(Object t : catalogList) {
@@ -162,24 +162,24 @@ public class UserOption {
 			}
 			catalog.setTextContent(catalogString.trim());
 			
-			description.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_DESCRIPTION)));
-			origFileAddress.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_ORIG_FILE_ADDRESS)));
-			newFileAddress.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_NEW_FILE_ADDRESS)));
+			description.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_DESCRIPTION)));
+			origFileAddress.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_ORIG_FILE_ADDRESS)));
+			newFileAddress.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_NEW_FILE_ADDRESS)));
 			//tags to tag
-			BasicBSONList tagList = (BasicBSONList)videoBean.get(MongoConst.KEY_VIDEO_TAGS);
+			BasicBSONList tagList = (BasicBSONList)vedioBean.get(MongoConst.KEY_VEDIO_TAGS);
 			if(tagList != null) {
 				for(Object t : tagList) {
-					Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VIDEO_TAG);
+					Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VEDIO_TAG);
 					tag.setTextContent(toString(t));
 				}
 			}
 			
-			uploadTime.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOAD_TIME)));
-			clickCount.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_CLICK_COUNT)));
+			uploadTime.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOAD_TIME)));
+			clickCount.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_CLICK_COUNT)));
 			//score
-			DBObject scoreBean = (DBObject)videoBean.get(MongoConst.KEY_VIDEO_SCORE);
-			Object scoreTotal = scoreBean.get(MongoConst.KEY_VIDEO_SCORE_TOTAL);
-			Object scoreCountBean = scoreBean.get(MongoConst.KEY_VIDEO_SCORE_COUNT);
+			DBObject scoreBean = (DBObject)vedioBean.get(MongoConst.KEY_VEDIO_SCORE);
+			Object scoreTotal = scoreBean.get(MongoConst.KEY_VEDIO_SCORE_TOTAL);
+			Object scoreCountBean = scoreBean.get(MongoConst.KEY_VEDIO_SCORE_COUNT);
 			
 			score.setTextContent(divide(scoreTotal, scoreCountBean));
 			scoreCount.setTextContent(toString(scoreCountBean));
@@ -210,20 +210,20 @@ public class UserOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(
-							MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(
+							MongoConst.COLLECTION_VEDIO);
 			
 			DBObject queryBean = new BasicDBObject();
 			queryBean.put(MongoConst.DATABASE_KEYWORD_ID, new ObjectId(id));
 			DBObject updateBean = new BasicDBObject();
 			DBObject increaseBean = new BasicDBObject();
-			String scoreTotalKey = MongoConst.KEY_VIDEO_SCORE + "." + MongoConst.KEY_VIDEO_SCORE_TOTAL;
-			String scoreCountKey = MongoConst.KEY_VIDEO_SCORE + "." + MongoConst.KEY_VIDEO_SCORE_COUNT;
+			String scoreTotalKey = MongoConst.KEY_VEDIO_SCORE + "." + MongoConst.KEY_VEDIO_SCORE_TOTAL;
+			String scoreCountKey = MongoConst.KEY_VEDIO_SCORE + "." + MongoConst.KEY_VEDIO_SCORE_COUNT;
 			increaseBean.put(scoreTotalKey, Double.valueOf(scoreString));
 			increaseBean.put(scoreCountKey, Integer.valueOf(1));
 			updateBean.put(MongoConst.MONGO_MODIFYER_INCREASE, increaseBean);
 			
-			videoCollection.update(queryBean, updateBean);
+			vedioCollection.update(queryBean, updateBean);
 			DBObject error = db.getLastError();
 			Object err = error.get(MongoConst.FUNCTION_GETLASTERROR_RETURN_KEY_ERR);
 			if(err != null) {
@@ -233,17 +233,17 @@ public class UserOption {
 			
 			//get score
 			DBObject returnBean = new BasicDBObject();
-			returnBean.put(MongoConst.KEY_VIDEO_SCORE, 1);
-			DBObject bean = videoCollection.findOne(queryBean, returnBean);
+			returnBean.put(MongoConst.KEY_VEDIO_SCORE, 1);
+			DBObject bean = vedioCollection.findOne(queryBean, returnBean);
 			if(bean != null) {
 				Element root = doc.getDocumentElement();
 				Element body = XmlMaker.createElementChild(doc, root, XmlConst.DOCUMENT_BODY);
-				Element score = XmlMaker.createElementChild(doc, body, XmlConst.VIDEO_SCORE);
-				Element scoreCount = XmlMaker.createElementChild(doc, body, XmlConst.VIDEO_SCORE_COUNT);
+				Element score = XmlMaker.createElementChild(doc, body, XmlConst.VEDIO_SCORE);
+				Element scoreCount = XmlMaker.createElementChild(doc, body, XmlConst.VEDIO_SCORE_COUNT);
 				
-				DBObject scoreBean = (DBObject)bean.get(MongoConst.KEY_VIDEO_SCORE);
-				Object scoreTotal = scoreBean.get(MongoConst.KEY_VIDEO_SCORE_TOTAL);
-				Object scoreCountBean = scoreBean.get(MongoConst.KEY_VIDEO_SCORE_COUNT);
+				DBObject scoreBean = (DBObject)bean.get(MongoConst.KEY_VEDIO_SCORE);
+				Object scoreTotal = scoreBean.get(MongoConst.KEY_VEDIO_SCORE_TOTAL);
+				Object scoreCountBean = scoreBean.get(MongoConst.KEY_VEDIO_SCORE_COUNT);
 				
 				score.setTextContent(divide(scoreTotal, scoreCountBean));
 				scoreCount.setTextContent(toString(scoreCountBean));
@@ -333,12 +333,12 @@ public class UserOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(MongoConst.COLLECTION_VEDIO);
 			
 			DBObject query = new BasicDBObject();
 			String[] catalogName = catalogString.split("\\s");
-			query.put(MongoConst.KEY_VIDEO_CATALOG, catalogName[catalogName.length - 1]);
-			query.put(MongoConst.KEY_VIDEO_IS_ACTIVE, true);
+			query.put(MongoConst.KEY_VEDIO_CATALOG, catalogName[catalogName.length - 1]);
+			query.put(MongoConst.KEY_VEDIO_IS_ACTIVE, true);
 			
 			if(start != null) {
 				DBObject from = new BasicDBObject();
@@ -347,41 +347,41 @@ public class UserOption {
 			}
 			
 			
-			DBCursor videoCursor = videoCollection.find(query);			
+			DBCursor vedioCursor = vedioCollection.find(query);			
 			DBObject order = new BasicDBObject();
 			order.put(MongoConst.DATABASE_KEYWORD_ID, -1);
-			videoCursor = videoCursor.sort(order);
-			int videoCount = ServiceConst.LISTING_LIMIT;
+			vedioCursor = vedioCursor.sort(order);
+			int vedioCount = ServiceConst.LISTING_LIMIT;
 			if(limit != null) {
-				videoCount = Integer.parseInt(limit);
+				vedioCount = Integer.parseInt(limit);
 			}
-			videoCursor.limit(videoCount);
+			vedioCursor.limit(vedioCount);
 
-			int count = videoCursor.count();
+			int count = vedioCursor.count();
 			Element root = doc.getDocumentElement();
 			Element body = XmlMaker.createElementChild(doc, root, XmlConst.DOCUMENT_BODY);
-			Element videoList = XmlMaker.createElementChild(doc, body, XmlConst.BODY_LIST);
-			videoList.setAttribute(XmlConst.LIST_SIZE, String.valueOf(count));
-			videoList.setAttribute(XmlConst.LIST_TYPE, XmlConst.BODY_VIDEO);
+			Element vedioList = XmlMaker.createElementChild(doc, body, XmlConst.BODY_LIST);
+			vedioList.setAttribute(XmlConst.LIST_SIZE, String.valueOf(count));
+			vedioList.setAttribute(XmlConst.LIST_TYPE, XmlConst.BODY_VEDIO);
 			
-			while (videoCursor.hasNext()) {
-				DBObject videoBean = videoCursor.next();
-				Element video = XmlMaker.createElementChild(doc, videoList, XmlConst.BODY_VIDEO);
-				Element id = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_ID);
-				Element uploader = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOADER);
-				Element caption = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CAPTION);
-				Element catalog = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CATALOG);
-				Element description = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_DESCRIPTION);
-				Element tags = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_TAGS);
-				Element uploadTime = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOAD_TIME);
+			while (vedioCursor.hasNext()) {
+				DBObject vedioBean = vedioCursor.next();
+				Element vedio = XmlMaker.createElementChild(doc, vedioList, XmlConst.BODY_VEDIO);
+				Element id = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_ID);
+				Element uploader = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOADER);
+				Element caption = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CAPTION);
+				Element catalog = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CATALOG);
+				Element description = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_DESCRIPTION);
+				Element tags = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_TAGS);
+				Element uploadTime = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOAD_TIME);
 
-				id.setTextContent(toString(videoBean.get(MongoConst.DATABASE_KEYWORD_ID)));
-				uploader.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOADER)));
-				caption.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_CAPTION)));
-				description.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_DESCRIPTION)));
+				id.setTextContent(toString(vedioBean.get(MongoConst.DATABASE_KEYWORD_ID)));
+				uploader.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOADER)));
+				caption.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_CAPTION)));
+				description.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_DESCRIPTION)));
 				
 				//catalog array to catalog string
-				BasicBSONList catalogList = (BasicBSONList)videoBean.get(MongoConst.KEY_VIDEO_CATALOG);
+				BasicBSONList catalogList = (BasicBSONList)vedioBean.get(MongoConst.KEY_VEDIO_CATALOG);
 				catalogString = "";
 				if(catalogList != null) {
 					for(Object t : catalogList) {
@@ -391,15 +391,15 @@ public class UserOption {
 				catalog.setTextContent(catalogString.trim());
 				
 				// tags to tag
-				BasicBSONList tagList = (BasicBSONList) videoBean.get(MongoConst.KEY_VIDEO_TAGS);
+				BasicBSONList tagList = (BasicBSONList) vedioBean.get(MongoConst.KEY_VEDIO_TAGS);
 				if (tagList != null) {
 					for (Object t : tagList) {
-						Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VIDEO_TAG);
+						Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VEDIO_TAG);
 						tag.setTextContent(toString(t));
 					}
 				}
 				
-				uploadTime.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOAD_TIME)));
+				uploadTime.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOAD_TIME)));
 			}
 		} catch (MongoException e) {
 			//log mail
@@ -430,7 +430,7 @@ public class UserOption {
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
 			DBCollection commentCollection = db.getCollection(MongoConst.COLLECTION_COMMENT);
 			DBObject commentBean = new BasicDBObject();
-			commentBean.put(MongoConst.KEY_COMMENT_VIDEO_ID, id);
+			commentBean.put(MongoConst.KEY_COMMENT_VEDIO_ID, id);
 			commentBean.put(MongoConst.KEY_COMMENT_USER, user);			
 			commentBean.put(MongoConst.KEY_COMMENT_USER_NAME, userName);
 			commentBean.put(MongoConst.KEY_COMMENT_CONTENT, content);
@@ -467,7 +467,7 @@ public class UserOption {
 			DBCollection commentCollection = db.getCollection(MongoConst.COLLECTION_COMMENT);
 			
 			DBObject query = new BasicDBObject();
-			query.put(MongoConst.KEY_COMMENT_VIDEO_ID, new ObjectId(id));
+			query.put(MongoConst.KEY_COMMENT_VEDIO_ID, new ObjectId(id));
 			
 			if(start != null) {
 				DBObject from = new BasicDBObject();
@@ -497,14 +497,14 @@ public class UserOption {
 				DBObject commentBean = commentCursor.next();
 				Element comment = XmlMaker.createElementChild(doc, commentList, XmlConst.BODY_COMMENT);
 				Element commentId = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_ID);
-				Element videoId = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_VIDEO_ID);
+				Element vedioId = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_VEDIO_ID);
 				Element user = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_USER);
 				Element userName = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_UESR_NAME);
 				Element content = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_CONTENT);
 				Element time = XmlMaker.createElementChild(doc, comment, XmlConst.COMMENT_TIME);
 				
 				commentId.setTextContent(toString(commentBean.get(MongoConst.DATABASE_KEYWORD_ID)));
-				videoId.setTextContent(toString(commentBean.get(MongoConst.KEY_COMMENT_VIDEO_ID)));
+				vedioId.setTextContent(toString(commentBean.get(MongoConst.KEY_COMMENT_VEDIO_ID)));
 				user.setTextContent(toString(commentBean.get(MongoConst.KEY_COMMENT_USER)));
 				userName.setTextContent(toString(commentBean.get(MongoConst.KEY_COMMENT_USER_NAME)));
 				content.setTextContent(toString(commentBean.get(MongoConst.KEY_COMMENT_CONTENT)));
@@ -534,14 +534,14 @@ public class UserOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(MongoConst.COLLECTION_VEDIO);
 			
 			DBObject queryBean = new BasicDBObject();
 			DBObject inBean = new BasicDBObject();
 			String[] tagArray = find.trim().split("\\s");
 			inBean.put(MongoConst.MONGO_QUERY_IN, tagArray);
-			queryBean.put(MongoConst.KEY_VIDEO_TAGS, inBean);
-			queryBean.put(MongoConst.KEY_VIDEO_IS_ACTIVE, Boolean.TRUE);
+			queryBean.put(MongoConst.KEY_VEDIO_TAGS, inBean);
+			queryBean.put(MongoConst.KEY_VEDIO_IS_ACTIVE, Boolean.TRUE);
 			
 			if(start != null) {
 				DBObject from = new BasicDBObject();
@@ -550,43 +550,43 @@ public class UserOption {
 			}
 			
 			
-			DBCursor videoCursor = videoCollection.find(queryBean);			
+			DBCursor videoCursor = vedioCollection.find(queryBean);			
 			DBObject orderBean = new BasicDBObject();
 			orderBean.put(MongoConst.DATABASE_KEYWORD_ID, -1);
 			videoCursor = videoCursor.sort(orderBean);
-			int videoCount = ServiceConst.LISTING_LIMIT;
+			int vedioCount = ServiceConst.LISTING_LIMIT;
 			if(limit != null) {
-				videoCount = Integer.parseInt(limit);
+				vedioCount = Integer.parseInt(limit);
 			}
-			videoCursor.limit(videoCount);
+			videoCursor.limit(vedioCount);
 			
 			int count = videoCursor.count();
 			Element root = doc.getDocumentElement();
 			Element body = XmlMaker.createElementChild(doc, root, XmlConst.DOCUMENT_BODY);
-			Element videoList = XmlMaker.createElementChild(doc, body, XmlConst.BODY_LIST);
-			videoList.setAttribute(XmlConst.LIST_SIZE, String.valueOf(count));
-			videoList.setAttribute(XmlConst.LIST_TYPE, XmlConst.BODY_VIDEO);
+			Element vedioList = XmlMaker.createElementChild(doc, body, XmlConst.BODY_LIST);
+			vedioList.setAttribute(XmlConst.LIST_SIZE, String.valueOf(count));
+			vedioList.setAttribute(XmlConst.LIST_TYPE, XmlConst.BODY_VEDIO);
 			
 			while (videoCursor.hasNext()) {
-				DBObject videoBean = videoCursor.next();
-				Element video = XmlMaker.createElementChild(doc, videoList, XmlConst.BODY_VIDEO);
-				Element id = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_ID);
-				Element uploader = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOADER);
-				Element caption = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CAPTION);
-				Element catalog = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CATALOG);
-				Element description = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_DESCRIPTION);
-				Element tags = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_TAGS);
-				Element clickCount = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_CLICK_COUNT);
-				Element uploadTime = XmlMaker.createElementChild(doc, video, XmlConst.VIDEO_UPLOAD_TIME);
+				DBObject vedioBean = videoCursor.next();
+				Element vedio = XmlMaker.createElementChild(doc, vedioList, XmlConst.BODY_VEDIO);
+				Element id = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_ID);
+				Element uploader = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOADER);
+				Element caption = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CAPTION);
+				Element catalog = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CATALOG);
+				Element description = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_DESCRIPTION);
+				Element tags = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_TAGS);
+				Element clickCount = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_CLICK_COUNT);
+				Element uploadTime = XmlMaker.createElementChild(doc, vedio, XmlConst.VEDIO_UPLOAD_TIME);
 
-				id.setTextContent(toString(videoBean.get(MongoConst.DATABASE_KEYWORD_ID)));
-				uploader.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOADER)));
-				caption.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_CAPTION)));
-				description.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_DESCRIPTION)));
-				clickCount.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_CLICK_COUNT)));
+				id.setTextContent(toString(vedioBean.get(MongoConst.DATABASE_KEYWORD_ID)));
+				uploader.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOADER)));
+				caption.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_CAPTION)));
+				description.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_DESCRIPTION)));
+				clickCount.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_CLICK_COUNT)));
 				
 				//catalog array to catalog string
-				BasicBSONList catalogList = (BasicBSONList)videoBean.get(MongoConst.KEY_VIDEO_CATALOG);
+				BasicBSONList catalogList = (BasicBSONList)vedioBean.get(MongoConst.KEY_VEDIO_CATALOG);
 				String catalogString = "";
 				if(catalogList != null) {
 					for(Object t : catalogList) {
@@ -596,14 +596,14 @@ public class UserOption {
 				catalog.setTextContent(catalogString.trim());
 				
 				// tags to tag
-				BasicBSONList tagList = (BasicBSONList) videoBean.get(MongoConst.KEY_VIDEO_TAGS);
+				BasicBSONList tagList = (BasicBSONList) vedioBean.get(MongoConst.KEY_VEDIO_TAGS);
 				if (tagList != null) {
 					for (Object t : tagList) {
-						Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VIDEO_TAG);
+						Element tag = XmlMaker.createElementChild(doc, tags, XmlConst.VEDIO_TAG);
 						tag.setTextContent(toString(t));
 					}
 				}
-				uploadTime.setTextContent(toString(videoBean.get(MongoConst.KEY_VIDEO_UPLOAD_TIME)));
+				uploadTime.setTextContent(toString(vedioBean.get(MongoConst.KEY_VEDIO_UPLOAD_TIME)));
 			}
 		} catch (MongoException e) {
 			//log mail

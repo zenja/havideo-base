@@ -25,7 +25,7 @@ import com.mongodb.MongoException;
 public class BackgroundOption {
 	/*
 	 * options acted by site's web arch
-	 * contains activate(activate a video),inactivate
+	 * contains activate(activate a vedio),inactivate
 	 * all encode must be utf-8
 	 * method name : httpMethodName + pathName
 	 */
@@ -49,15 +49,15 @@ public class BackgroundOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			DBCollection videoCollection = db.getCollection(
-							MongoConst.COLLECTION_VIDEO);
+			DBCollection vedioCollection = db.getCollection(
+							MongoConst.COLLECTION_VEDIO);
 			DBObject orig = new BasicDBObject();
 			orig.put(MongoConst.DATABASE_KEYWORD_ID, new ObjectId(id));
 			DBObject change = new BasicDBObject();
-			change.put(MongoConst.KEY_VIDEO_IS_ACTIVE, new Boolean(makeActive));
+			change.put(MongoConst.KEY_VEDIO_IS_ACTIVE, new Boolean(makeActive));
 			DBObject update = new BasicDBObject();
 			update.put(MongoConst.MONGO_MODIFYER_SET, change);
-			videoCollection.update(orig, update);
+			vedioCollection.update(orig, update);
 			DBObject error = db.getLastError();
 			if((Boolean)error.get(MongoConst.FUNCTION_GETLASTERROR_RETURN_KEY_UPDATED_EXISTING)) {
 				ret = ServiceConst.RETURN_TEXT_PLAIN_TRUE;

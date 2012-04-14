@@ -89,14 +89,14 @@ public class InitOption {
 			createBean.put(MongoConst.CREATE_COLLECTION_CAPPED, false);
 			db.createCollection(MongoConst.COLLECTION_CATALOG, createBean);
 			db.createCollection(MongoConst.COLLECTION_COMMENT, createBean);
-			db.createCollection(MongoConst.COLLECTION_VIDEO, createBean);
+			db.createCollection(MongoConst.COLLECTION_VEDIO, createBean);
 			
 			DBCollection commentCollection = db.getCollection(MongoConst.COLLECTION_COMMENT);
-			commentCollection.ensureIndex(MongoConst.KEY_COMMENT_VIDEO_ID);
+			commentCollection.ensureIndex(MongoConst.KEY_COMMENT_VEDIO_ID);
 			
-			DBCollection videoCollection = db.getCollection(MongoConst.COLLECTION_VIDEO);
-			videoCollection.ensureIndex(MongoConst.KEY_VIDEO_CATALOG);
-			videoCollection.ensureIndex(MongoConst.KEY_VIDEO_TAGS);
+			DBCollection vedioCollection = db.getCollection(MongoConst.COLLECTION_VEDIO);
+			vedioCollection.ensureIndex(MongoConst.KEY_VEDIO_CATALOG);
+			vedioCollection.ensureIndex(MongoConst.KEY_VEDIO_TAGS);
 		} catch (MongoException e) {
 			// log mail
 			ret = HtmlTemplater.errorHtml(e.getMessage());
