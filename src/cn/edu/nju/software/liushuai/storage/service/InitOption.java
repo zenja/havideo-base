@@ -21,13 +21,13 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
-/*
- * options acted when first use the system by admin
- * contains checkAll, initAll
- * all encode must be utf-8
- */
 @Path("/init")
 public class InitOption {
+	/*
+	 * options acted when first use the system by admin
+	 * contains checkAll, initAll
+	 * all encode must be utf-8
+	 */
 	
 	public String getStatus() throws SeeGodException {
 		StringBuilder sb = new StringBuilder();
@@ -66,9 +66,6 @@ public class InitOption {
 		return sb.toString();
 	}
 	
-	/*
-	 * Init the database
-	 */
 	@POST
 	@Path("do")
 	@Produces(MediaType.TEXT_HTML)
@@ -79,35 +76,24 @@ public class InitOption {
 		try {
 			mongo = MongoFactory.getMongoConnetion();
 			DB db = mongo.getDB(MongoConst.DATABASE_NAME);
-			
-			//Drop the database first
 			db.dropDatabase();
 			
-			// Error handling stuff
 			DBObject error = db.getLastError();
 			Object err = error.get(MongoConst.FUNCTION_GETLASTERROR_RETURN_KEY_ERR);
 			if (err != null) {
 				ret = HtmlTemplater.errorHtml(err.toString());
-				//TODO: may log error here
+				//may log error
 			}
 			
-			/*
-			 * TODO:
-			 * wangxing ask liushuai: What the hell is this??
-			 */
 			DBObject createBean = new BasicDBObject();
 			createBean.put(MongoConst.CREATE_COLLECTION_CAPPED, false);
-			
-			// create collections
 			db.createCollection(MongoConst.COLLECTION_CATALOG, createBean);
 			db.createCollection(MongoConst.COLLECTION_COMMENT, createBean);
 			db.createCollection(MongoConst.COLLECTION_VIDEO, createBean);
 			
-			// set indexes for collection COLLECTION_COMMENT
 			DBCollection commentCollection = db.getCollection(MongoConst.COLLECTION_COMMENT);
 			commentCollection.ensureIndex(MongoConst.KEY_COMMENT_VIDEO_ID);
 			
-			//set indexes for collection COLLECTION_VIDEO
 			DBCollection videoCollection = db.getCollection(MongoConst.COLLECTION_VIDEO);
 			videoCollection.ensureIndex(MongoConst.KEY_VIDEO_CATALOG);
 			videoCollection.ensureIndex(MongoConst.KEY_VIDEO_TAGS);
