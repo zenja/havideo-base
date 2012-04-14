@@ -30,14 +30,14 @@ import cn.edu.nju.software.liushuai.storage.mongodb.MongoFactory;
 import cn.edu.nju.software.liushuai.storage.util.ErrorMessage;
 import cn.edu.nju.software.liushuai.storage.util.HtmlTemplater;
 
+/*
+ * options acted by site admin contains
+ * catalog/modify, catalog/create, catalog/delete
+ * all encode must be utf-8 method
+ * name : httpMethodName + pathName
+ */
 @Path("/admin")
 public class AdminOption {
-	/*
-	 * options acted by site admin contains
-	 * catalog/modify,catalog/create,catalog/delete
-	 * all encode must be utf-8 method
-	 * name : httpMethodName + pathName
-	 */
 
 	@POST
 	@Path("/catalog/modify/{id}")
