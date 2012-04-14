@@ -18,7 +18,27 @@
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Jersey REST Service for meta-data</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>org.zenja.havideo.metadata.resources</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>Jersey REST Service for meta-data</servlet-name>
+		<url-pattern>/api/metadata/*</url-pattern>
+	</servlet-mapping>
+	
+	<context-param>
+		<param-name>mongodb_connection_host</param-name>
+		<param-value>localhost</param-value>
+	</context-param>
+	
 	<context-param>
 		<param-name>hadoop_base</param-name>
 		<param-value>/home/wangxing/Software/hadoop-1.0.1</param-value>
@@ -70,6 +90,10 @@
 	
 	<listener>
 		<listener-class>org.zenja.havideo.db.DBConfiguration</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.zenja.havideo.metadata.mongodb.MongoDBConfiguration</listener-class>
 	</listener>
 
 	<welcome-file-list>
