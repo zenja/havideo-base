@@ -29,6 +29,9 @@ public class VideoResource {
 	/**
 	 * Upload the meta-data for the newly uploaded video
 	 * 
+	 * NO NOT NEDDED NOW:
+	 * already integrated into raw video web service
+	 * 
 	 * @param title
 	 * @param summary
 	 * @param tags

@@ -14,6 +14,21 @@
 		<p>
 			User_id: <input type="text" name="user_id" value="1"></input>
 		</p>
+		<p>
+			Title: <input type="text" name="title" value="Test Title"></input>
+		</p>
+		<p>
+			Summary: <input type="text" name="summary" value="Test Summary"></input>
+		</p>
+		<p>
+			Tags: <input type="text" name="tags" value="狗,猫,僵尸,weibo"></input>
+		</p>
+		<p>
+			Catalog: <input type="text" name="catalog" value="搞笑"></input>
+		</p>
+		<p>
+			Uploader Name: <input type="text" name="uploaderName" value="wangxing"></input>
+		</p>
 		<input type="submit" value="Upload It" />
 	</form>
 </body>

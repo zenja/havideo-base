@@ -28,6 +28,18 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+		
+	<!-- Usually needs to be changed! -->
+	<context-param>
+		<param-name>hadoop_base</param-name>
+		<param-value>/home/wangxing/Software/hadoop-1.0.1</param-value>
+	</context-param>
+	
+	<!-- Usually needs to be changed! -->
+	<context-param>
+		<param-name>converter_jar_path</param-name>
+		<param-value>/home/wangxing/temp/havideo/havideo-converter.jar</param-value>
+	</context-param>
 
 	<servlet-mapping>
 		<servlet-name>Jersey REST Service for meta-data</servlet-name>
@@ -37,11 +49,6 @@
 	<context-param>
 		<param-name>mongodb_connection_host</param-name>
 		<param-value>localhost</param-value>
-	</context-param>
-	
-	<context-param>
-		<param-name>hadoop_base</param-name>
-		<param-value>/home/wangxing/Software/hadoop-1.0.1</param-value>
 	</context-param>
 	
 	<context-param>
@@ -84,6 +91,11 @@
 		<param-value>com.mysql.jdbc.Driver</param-value>
 	</context-param>
 	
+	<context-param>
+		<param-name>converter_local_directory</param-name>
+		<param-value>/tmp/</param-value>
+	</context-param>
+	
 	<listener>
 		<listener-class>org.zenja.havideo.hdfs.HDFSConfiguration</listener-class>
 	</listener>
@@ -94,6 +106,10 @@
 	
 	<listener>
 		<listener-class>org.zenja.havideo.metadata.mongodb.MongoDBConfiguration</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.zenja.havideo.converter.ConverterConfiguration</listener-class>
 	</listener>
 
 	<welcome-file-list>
