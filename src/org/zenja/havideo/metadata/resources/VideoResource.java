@@ -48,6 +48,16 @@ public class VideoResource {
 			@FormParam("catalog") final String catalog, 
 			@FormParam("uploaderName") final String uploaderName) {
 		
+		// check if params are valid
+		if (title == null || summary == null || tags == null 
+				|| catalog == null || uploaderName == null) {
+			return Response.status(500).entity("Parameters not valid").build();
+		}
+		if (title.isEmpty() || summary.isEmpty() || tags.isEmpty()
+				|| catalog.isEmpty() || uploaderName.isEmpty()) {
+			return Response.status(500).entity("Parameters not valid").build();
+		}
+		
 		Video video = videoService.createVideo(title, summary, tags, catalog, uploaderName);
 		videoService.saveVideo(video);
 		

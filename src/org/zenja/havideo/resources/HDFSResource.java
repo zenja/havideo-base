@@ -2,7 +2,6 @@ package org.zenja.havideo.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -10,34 +9,56 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
-import org.apache.hadoop.fs.FSDataInputStream;
 import org.zenja.havideo.hdfs.HDFS;
-
+import org.zenja.havideo.hdfs.utils.StreamingOutputMaker;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 @Path("/hdfs")
 public class HDFSResource {
-	@GET @Path("/download/{path}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public StreamingOutput download(@PathParam("path") final String encreptedPath) {
-		return new StreamingOutput() {
-			public void write(OutputStream output) throws IOException, WebApplicationException {
-				String realPath = encreptedPath.replace(',', '/');
-				FSDataInputStream in = HDFS.getFileAsStream(realPath);
-				byte[] b = new byte[1024];
-			    int numBytes = 0;
-			    while ((numBytes = in.read(b)) > 0) {
-			    	output.write(b, 0, numBytes);
-			    }
-			    output.close();
+	@GET @Path("/download")
+	public Response downloadWithQueryParam(@QueryParam("path") final String path) {
+		try {
+			//check if params are valid
+			if(path == null || path.isEmpty()) {
+				return Response.status(500).entity("Parameters not valid").build();
 			}
-		};
+			if(HDFS.isExist(path) == false) {
+				return Response.status(500).entity("File not exists.").build();
+			}
+			
+			return Response.ok(
+					StreamingOutputMaker.makeStreamingOutput(path), 
+					MediaType.MULTIPART_FORM_DATA).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.status(500).entity("Exception Occured.").build();
+		}
+	}
+	
+	@GET @Path("/download/{path}")
+	public Response download(@PathParam("path") final String encreptedPath) {
+		String realPath = encreptedPath.replace(',', '/');
+		try {
+			//check if params are valid
+			if(realPath == null || realPath.isEmpty()) {
+				return Response.status(500).entity("Parameters not valid").build();
+			}
+			if(HDFS.isExist(realPath) == false) {
+				return Response.status(500).entity("File not exists.").build();
+			}
+			
+			return Response.ok(
+					StreamingOutputMaker.makeStreamingOutput(realPath), 
+					MediaType.MULTIPART_FORM_DATA).build();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return Response.status(500).entity("Exception Occured.").build();
+		}
 	}
 	
 	@POST

@@ -7,9 +7,10 @@ import com.google.code.morphia.annotations.Id;
 public class Comment {
 	@Id private ObjectId id;
 
+	private ObjectId videoId;
 	private String content;
 	private String userName;
-	private String commentTime;
+	private Long commentTime;
 
 	public ObjectId getId() {
 		return id;
@@ -35,11 +36,19 @@ public class Comment {
 		this.userName = userName;
 	}
 
-	public String getCommentTime() {
+	public Long getCommentTime() {
 		return commentTime;
 	}
 
-	public void setCommentTime(String commentTime) {
+	public void setCommentTime(Long commentTime) {
 		this.commentTime = commentTime;
+	}
+
+	public ObjectId getVideoId() {
+		return videoId;
+	}
+
+	public void setVideoId(ObjectId videoId) {
+		this.videoId = videoId;
 	}
 }

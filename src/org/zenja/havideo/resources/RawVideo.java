@@ -31,6 +31,7 @@ public class RawVideo {
 	private static Logger logger = Logger.getLogger(RawVideo.class);
 	private String rawVideoDirectory = HDFSConfiguration.getRawVideoDirectory();
 	private String convertedVideoDirectory = HDFSConfiguration.getConvertedVideoDirectory();
+	private String thumbnailDirectory = HDFSConfiguration.getVideoThumbnailDirectory();
 	private VideoService videoService = new VideoService();
 	
 	@GET 
@@ -111,16 +112,19 @@ public class RawVideo {
 		//notify video converter service
 		String srcPath = filePath;
 		String flvFileName = generatedFileName.split("\\.")[0] + ".flv";
-		String dstPath = convertedVideoDirectory + "/" + flvFileName;
+		String thumbFileName = generatedFileName.split("\\.")[0] + ".jpg";
+		String videoDstPath = convertedVideoDirectory + "/" + flvFileName;
+		String thumbDstPath = thumbnailDirectory + "/" + thumbFileName;
 		logger.debug("Start convertion...");
 		logger.debug("Source: " + srcPath);
-		logger.debug("Destination: " + dstPath);
-		new ConverterDriver().startConversion(srcPath, dstPath);
+		logger.debug("Video Destination: " + videoDstPath);
+		new ConverterDriver().startConversion(srcPath, videoDstPath, thumbDstPath);
 		
 		// Create video object and save
 		Video video = videoService.createVideo(title, summary, tags, catalog, uploaderName);
 		video.setRawVideoPath(srcPath);
-		video.setConvertedVideoPath(dstPath);
+		video.setConvertedVideoPath(videoDstPath);
+		video.setThumbnailPath(thumbDstPath);
 		videoService.saveVideo(video);
 		
 		return Response.status(200).entity(output).build();

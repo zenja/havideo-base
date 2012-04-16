@@ -68,6 +68,10 @@ public class VideoService {
 	public List<Video> findAllVideo() {
 		return videoDAO.findAll();
 	}
+	
+	public void deleteVideo(Video v) {
+		videoDAO.delete(v);
+	}
 
 	public void deleteAllVideos() {
 		for(Video video : findAllVideo()) {
@@ -90,4 +94,10 @@ public class VideoService {
 		JSONObject o = JSONObject.fromObject(video, jsonConfig);
 		return o.toString();
 	}
+
+	public boolean isVideoIdExists(String videoId) {
+		if(findById(videoId) == null) return false;
+		else return true;
+	}
+
 }

@@ -10,13 +10,22 @@ import org.zenja.havideo.hdfs.HDFS;
 
 public class ConverterDriver {
 	
+	private final static String FFMPEG = "/usr/bin/ffmpeg";
+	private static String local_src;
+	private static String local_dst;
+	private static String videoDstPath;
+	private static String thumbDstPath;
+	
 	/**
 	 * Start conversion thread
 	 */
-	public void startConversion(String srcPath, String dstPath) {
+	public void startConversion(String srcPath, String videoDstPath, String thumbDstPath) {
+		ConverterDriver.videoDstPath = videoDstPath;
+		ConverterDriver.thumbDstPath = thumbDstPath;
+		
 		// remove destination file if it exists
 		try {
-			HDFS.deleteFile(dstPath, true);
+			HDFS.deleteFile(videoDstPath, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -26,10 +35,10 @@ public class ConverterDriver {
 				srcPath.lastIndexOf("."));
 
 		// local video position after download from HDFS
-		String local_src = ConverterConfiguration.getConverterLocalDirectory()
+		local_src = ConverterConfiguration.getConverterLocalDirectory()
 				+ srcPath.substring(srcPath.lastIndexOf("/") + 1);
 		// local video position after exec
-		String local_dst = ConverterConfiguration.getConverterLocalDirectory() + video_name;
+		local_dst = ConverterConfiguration.getConverterLocalDirectory() + video_name;
 
 		/*
 		 * test
@@ -39,25 +48,19 @@ public class ConverterDriver {
 		System.out.println(srcPath + " ------> " + local_src);
 		System.out.println(local_src + " ------> " + local_dst);
 		System.out.println(local_src.substring(0, local_src.lastIndexOf("."))
-				+ "_flv_final.flv" + " ------> " + dstPath);
+				+ "_flv_final.flv" + " ------> " + videoDstPath);
 		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 		copyToLocal(srcPath, local_src);
 
 		SubThread thread = new SubThread(local_src, local_dst);
 		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			thread.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		/*
-		 * test
-		 */
-		System.out.println("after compression ---------------------------------");
-		copyFromLocal(local_src.substring(0, local_src.lastIndexOf("."))
-				+ "_flv_final.flv", dstPath);
 	}
 	
 	public static class SubThread extends Thread {
@@ -83,11 +86,42 @@ public class ConverterDriver {
 				doWaitFor(p);
 				p.destroy();
 				
+				System.out.println("after compression ---------------------------------");
+				copyFromLocal(local_src.substring(0, local_src.lastIndexOf("."))
+						+ "_flv_final.flv", videoDstPath);
+				
+				// generate thumbnail
+				getImage(local_src.substring(0, local_src.lastIndexOf("."))
+						+ "_flv_final.flv", thumbDstPath);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private static void getImage(String video_src, String img_dst) {
+		String img_local = video_src.substring(0, video_src.lastIndexOf("."))
+				+ ".jpg";
+		Runtime run = Runtime.getRuntime();
+		Process p;
+		try {
+			String command = FFMPEG + " -i " + video_src
+					+ " -y -f image2 -ss 00:00:01 -t 0.001 " + img_local;
+			System.out.println(command);
+			p = run.exec(command);
+			BufferedInputStream in = new BufferedInputStream(p.getInputStream());
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			br.readLine();
+
+			p.destroy();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		copyFromLocal(img_local, img_dst);
 	}
 	
 	/* a helper method */
@@ -111,7 +145,7 @@ public class ConverterDriver {
 	}
 	
 	/* a helper method */
-	private void copyFromLocal(String src, String dst) {
+	private static void copyFromLocal(String src, String dst) {
 		Runtime run = Runtime.getRuntime();
 		Process p;
 		try {
