@@ -33,6 +33,9 @@ public class RawVideo {
 	private String convertedVideoDirectory = HDFSConfiguration.getConvertedVideoDirectory();
 	private String thumbnailDirectory = HDFSConfiguration.getVideoThumbnailDirectory();
 	private VideoService videoService = new VideoService();
+	private static final String VIDEO_EXTENSIONS[] = 
+		{".avi", ".mp4", ".mpg", ".mpe", ".asf", ".asx", 
+		".wmv", ".rm", ".rmvb", ".flv", ".3pg", ".ogm", ".mkv", ".mov"};
 	
 	@GET 
 	@Path("/{file_name}")
@@ -86,9 +89,19 @@ public class RawVideo {
 			return Response.status(500).entity("Parameters not available").build();
 		}
 		
-		//TODO: check if the file is a video file
+		//check if the file is a video file
+		boolean fileTypeValid = false;
+		for(String extension : VIDEO_EXTENSIONS) {
+			if(fileDetail.getFileName().endsWith(extension) == true) {
+				fileTypeValid = true;
+				break;
+			}
+		}
+		if(fileTypeValid == false) {
+			return Response.status(500).entity("File type not supported").build();
+		}
 		
-		//TODO: check if the user exists (Urgent!)
+		//TODO: check if the user exists
 		
 		//build target directory path
 		String generatedFileName = 
